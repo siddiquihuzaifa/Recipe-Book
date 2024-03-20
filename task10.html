@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f7f7f7;
+        margin: 0;
+        padding: 20px;
+      }
+
+      #recipeForm {
+        background-color: #ffffff;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+
+      #recipeForm input[type="text"] {
+        width: calc(100% - 22px);
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      #recipeForm button {
+        background-color: #5cb85c;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      #recipeForm button:hover {
+        background-color: #4cae4c;
+      }
+
+      #recipeList {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      #recipeList li {
+        background-color: #ffffff;
+        padding: 10px;
+        margin-bottom: 5px;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <form id="recipeForm">
+      Recipe Name: <input type="text" id="name" required /><br />
+      Ingredients: <input type="text" id="ingredients" required /><br />
+      Instructions: <input type="text" id="instructions" required /><br />
+      <button type="submit">Add Recipe</button>
+    </form>
+    <ul id="recipeList"></ul>
+    <script>
+      // script.js
+      document
+        .getElementById("recipeForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const name = document.getElementById("name").value;
+          const ingredients = document.getElementById("ingredients").value;
+          const instructions = document.getElementById("instructions").value;
+
+          const recipe = { name, ingredients, instructions };
+
+          let recipes;
+
+          if (localStorage.getItem("recipes") === null) {
+            recipes = [];
+          } else {
+            recipes = JSON.parse(localStorage.getItem("recipes"));
+          }
+
+          recipes.push(recipe);
+
+          localStorage.setItem("recipes", JSON.stringify(recipes));
+
+          displayRecipes();
+        });
+
+      function displayRecipes() {
+        const recipeList = document.getElementById("recipeList");
+        recipeList.innerHTML = "";
+
+        const recipes = JSON.parse(localStorage.getItem("recipes"));
+
+        if (recipes) {
+          for (const recipe of recipes) {
+            recipeList.innerHTML += `<li>${recipe.name} - ${recipe.ingredients} - ${recipe.instructions}</li>`;
+          }
+        }
+      }
+
+      displayRecipes();
+    </script>
+  </body>
+</html>
